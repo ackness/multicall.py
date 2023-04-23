@@ -2,7 +2,7 @@
 from decimal import Decimal
 from multicall import Multicall, Call
 
-mc = Multicall("https://eth-mainnet.nodereal.io/v1/840570cd3ef8424dab6d60e994906ed7")
+mc = Multicall("https://mainnet.infura.io/v3/xyz")
 
 def from_wad(value):
     return Decimal(value) / 10 ** 18

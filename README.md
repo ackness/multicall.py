@@ -1,6 +1,6 @@
 # Multicall
 
-fork from https://github.com/banteg/multicall.py, but implements the multicall in client's side.
+fork from https://github.com/jsvisa/multicall.py, but implements the multicall in client's side.
 
 ## Install
 
@@ -11,6 +11,7 @@ pip install git+https://github.com/ackness/multicall.py.git#egg=multicall
 ## Example
 
 ```python
+
 
 from decimal import Decimal
 from multicall import Multicall, Call
@@ -40,13 +41,12 @@ def from_ilk(values):
     }
 
 
-result = mc.aggrate(
+result = mc.agg(
     [
         Call(
             target="0xdac17f958d2ee523a2206206994597c13d831ec7",
             function="balanceOf(address)(uint256)",
             args=("0xa929022c9107643515f5c777ce9a910f0d1e490c",),
-            returns=[],
         ),
         Call(
             target="0xdac17f958d2ee523a2206206994597c13d831ec7",
@@ -59,13 +59,6 @@ result = mc.aggrate(
             "ilks(bytes32)((uint256,uint256,uint256,uint256,uint256))",
             args=[b"ETH-A"],
             request_id="ETH-A",
-            returns=[
-                ["Art", from_wad],
-                ["rate", from_ray],
-                ["spot", from_ray],
-                ["line", from_rad],
-                ["dust", None],
-            ],
         ),
     ]
 )
