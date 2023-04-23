@@ -15,7 +15,7 @@ class DecodeError(Exception):
 
 @lru_cache(maxsize=4096)
 def parse_signature(s):
-    pattern = r'([a-zA-Z0-9_]+|\([a-zA-Z0-9,_]+\))'
+    pattern = r'([a-zA-Z0-9_]+|\([a-zA-Z0-9,_]*\))'
     return re.findall(pattern, s)
 
 @lru_cache(maxsize=1024)
