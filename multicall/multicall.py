@@ -48,25 +48,23 @@ class Multicall:
     ) -> Union[Dict, List[Dict]]:
         assert max_workers > 0, "max_workers must be not negative"
 
-        request_ids = set(call.request_id for call in calls)
+        request_ids = {call.request_id for call in calls}
         if len(request_ids) != len(calls):
             raise ValueError("request_id should be unique for each Call")
 
-        id_outputs = dict()
+        id_outputs = {}
         if max_workers == 1:
             for batch in self._partition_calls(calls, batch_size):
                 outputs = self.make_batch_call(batch, block_id, gas_limit)
-                id_outputs.update({e["id"]: e for e in outputs})
+                id_outputs |= {e["id"]: e for e in outputs}
         else:
             with concurrent.futures.ThreadPoolExecutor(max_workers) as executor:
-                futures = []
-                for batch in self._partition_calls(calls, batch_size):
-                    futures.append(
-                        executor.submit(
-                            self.make_batch_call, batch, block_id, gas_limit
-                        )
+                futures = [
+                    executor.submit(
+                        self.make_batch_call, batch, block_id, gas_limit
                     )
-
+                    for batch in self._partition_calls(calls, batch_size)
+                ]
                 for future in concurrent.futures.as_completed(futures):
                     id_outputs.update({e["id"]: e for e in future.result()})
 
@@ -94,7 +92,7 @@ class Multicall:
         return outputs
 
     def make_batch_request(self, requests: List[Dict]) -> List[Dict]:
-        if len(requests) == 0:
+        if not requests:
             return []
 
         self.logger.debug(
@@ -112,10 +110,7 @@ class Multicall:
         )
         text_response = to_text(text=raw_response.text)
         responses = FriendlyJsonSerde().json_decode(text_response)
-        if len(requests) > 1:
-            return responses  # type: ignore
-        else:
-            return [responses]
+        return responses if len(requests) > 1 else [responses]
 
     def _partition_calls(
         self, calls: Iterable, batch_size: int

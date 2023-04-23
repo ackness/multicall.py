@@ -7,13 +7,13 @@ fmt: ## Run black to format code
 	pipenv run black .
 
 test:  ## Run pytest for files under ./tests
-	PYTHONPATH=. pipenv run python -m pytest --nf --ff tests
+	python -m pytest --nf --ff ./integration_tests
 
 test-all:  ## Run pytest for all files
 	@export $(sed 's/#.*//g' .env | xargs) >/dev/null 2>&1
-	PYTHONPATH=. pipenv run python -m pytest --nf --ff .
+	run python -m pytest --nf --ff .
 
-setup:  ## Run pipenv install to setup the environment
-	PIPENV_VENV_IN_PROJECT=1 pipenv install --dev --skip-lock
-	PIPENV_VENV_IN_PROJECT=1 pipenv run pre-commit install
-	PIPENV_VENV_IN_PROJECT=1 pipenv run pre-commit install-hooks
+# setup:  ## Run pipenv install to setup the environment
+# 	pip install --dev --skip-lock
+# 	pip run pre-commit install
+# 	pip run pre-commit install-hooks

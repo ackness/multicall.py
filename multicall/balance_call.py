@@ -34,9 +34,9 @@ class BalanceCall(Call):
         try:
             balance = int(rpc_res["result"], 16)
         except Exception as e:
-            if ignore_error is True:
+            if ignore_error:
                 return None
-            raise Exception(e)
+            raise Exception(e) from e
         return balance
 
     def __call__(

@@ -1,21 +1,8 @@
-# Multicall
-
-fork from https://github.com/banteg/multicall.py, but implements the multicall in client's side.
-
-## Install
-
-```bash
-pip install git+https://github.com/ackness/multicall.py.git#egg=multicall
-```
-
-## Example
-
-```python
 
 from decimal import Decimal
 from multicall import Multicall, Call
 
-mc = Multicall("https://mainnet.infura.io/v3/xyz")
+mc = Multicall("https://eth-mainnet.nodereal.io/v1/840570cd3ef8424dab6d60e994906ed7")
 
 def from_wad(value):
     return Decimal(value) / 10 ** 18
@@ -40,13 +27,13 @@ def from_ilk(values):
     }
 
 
-result = mc.aggrate(
+result = mc.agg(
     [
         Call(
             target="0xdac17f958d2ee523a2206206994597c13d831ec7",
             function="balanceOf(address)(uint256)",
             args=("0xa929022c9107643515f5c777ce9a910f0d1e490c",),
-            returns=[],
+            # returns=[],
         ),
         Call(
             target="0xdac17f958d2ee523a2206206994597c13d831ec7",
@@ -59,22 +46,8 @@ result = mc.aggrate(
             "ilks(bytes32)((uint256,uint256,uint256,uint256,uint256))",
             args=[b"ETH-A"],
             request_id="ETH-A",
-            returns=[
-                ["Art", from_wad],
-                ["rate", from_ray],
-                ["spot", from_ray],
-                ["line", from_rad],
-                ["dust", None],
-            ],
         ),
     ]
 )
 
 print(result)
-```
-
-> response as below:
-
-```python
-[{'request_id': '5a7bd54c680592746135b37a6476eb6c', 'result': 49611180000000}, {'request_id': '0x47ac0fb4f2d84898e4d9e7b4dab3c24507a6d503', 'result': 1250000115495224}, {'request_id': 'ETH-A', 'result': (214915598502713845833006398, 1088006050754165121001226010, 1286165517241379310344827586206, 421276896854854321737657177053164827916909327485707736, 7500000000000000000000000000000000000000000000000)}]
-```
