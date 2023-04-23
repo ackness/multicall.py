@@ -4,29 +4,6 @@ from multicall import Multicall, Call
 
 mc = Multicall("https://mainnet.infura.io/v3/xyz")
 
-def from_wad(value):
-    return Decimal(value) / 10 ** 18
-
-
-def from_ray(value):
-    return Decimal(value) / 10 ** 27
-
-
-def from_rad(value):
-    return Decimal(value) / 10 ** 45
-
-
-def from_ilk(values):
-    print(values)
-    return {
-        "Art": from_wad(values[0]),
-        "rate": from_ray(values[1]),
-        "spot": from_ray(values[2]),
-        "line": from_rad(values[3]),
-        "dust": from_rad(values[4]),
-    }
-
-
 result = mc.agg(
     [
         Call(

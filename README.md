@@ -1,6 +1,6 @@
 # Multicall
 
-fork from https://github.com/jsvisa/multicall.py, but implements the multicall in client's side.
+fork from https://github.com/jsvisa/multicall.py, update eth_abi version > 4.0 for web3.py 6.0+.
 
 ## Install
 
@@ -17,29 +17,6 @@ from decimal import Decimal
 from multicall import Multicall, Call
 
 mc = Multicall("https://mainnet.infura.io/v3/xyz")
-
-def from_wad(value):
-    return Decimal(value) / 10 ** 18
-
-
-def from_ray(value):
-    return Decimal(value) / 10 ** 27
-
-
-def from_rad(value):
-    return Decimal(value) / 10 ** 45
-
-
-def from_ilk(values):
-    print(values)
-    return {
-        "Art": from_wad(values[0]),
-        "rate": from_ray(values[1]),
-        "spot": from_ray(values[2]),
-        "line": from_rad(values[3]),
-        "dust": from_rad(values[4]),
-    }
-
 
 result = mc.agg(
     [
@@ -69,5 +46,9 @@ print(result)
 > response as below:
 
 ```python
-[{'request_id': '5a7bd54c680592746135b37a6476eb6c', 'result': 49611180000000}, {'request_id': '0x47ac0fb4f2d84898e4d9e7b4dab3c24507a6d503', 'result': 1250000115495224}, {'request_id': 'ETH-A', 'result': (214915598502713845833006398, 1088006050754165121001226010, 1286165517241379310344827586206, 421276896854854321737657177053164827916909327485707736, 7500000000000000000000000000000000000000000000000)}]
+[
+    {'request_id': '5a7bd54c680592746135b37a6476eb6c', 'result': 49611180000000}, 
+    {'request_id': '0x47ac0fb4f2d84898e4d9e7b4dab3c24507a6d503', 'result': 1250000115495224}, 
+    {'request_id': 'ETH-A', 'result': (214915598502713845833006398, 1088006050754165121001226010, 1286165517241379310344827586206, 421276896854854321737657177053164827916909327485707736, 7500000000000000000000000000000000000000000000000)}
+]
 ```
